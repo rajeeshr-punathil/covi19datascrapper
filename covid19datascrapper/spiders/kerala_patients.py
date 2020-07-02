@@ -2,6 +2,15 @@ import scrapy
 
 from covid19datascrapper.items import Patient
 
+PATIENT_FIELDS = [
+    'patient_number', 'date_announced', 'date_added', 'age', 'gender', 
+    'residence_district', 'detected_city', 'detected_district', 'status',
+    'transmission_type', 'notes', 'related_patients', 'known_cluster',
+    'dhs_orig_patient_number', 'origin_state', 'origin_country',
+    'district_patient_number', 'city_patient_number', 'released',
+    'recovery_time', 'deceased', 'sources'
+]
+
 
 class PatientsSpider(scrapy.Spider):
 
@@ -12,15 +21,9 @@ class PatientsSpider(scrapy.Spider):
     name = 'kerala_patients'
     allowed_domains = ['https://docs.google.com']
     start_urls = ['https://docs.google.com/spreadsheets/d/e/2PACX-1vQU9eLCMT0XwWnoxV_LkyCkxMcPYO7z7ULdODoUFgcdzp48pgGpGrVZFXvraXYvUioVRsQgQDU_pQyI/pubhtml']
-    patient_fields = [
-        # Third cell is empty, hence the corresponding empty field-name.
-        'patient_number', 'date_announced', '', 'date_added', 'age', 'gender', 
-        'residence_district', 'detected_city', 'detected_district', 'status',
-        'transmission_type', 'notes', 'related_patients', 'known_cluster',
-        'dhs_orig_patient_number', 'origin_state', 'origin_country',
-        'district_patient_number', 'city_patient_number', 'released',
-        'recovery_time', 'deceased', 'sources'
-    ]
+    custom_settings = {
+        'FEED_EXPORT_FIELDS' : PATIENT_FIELDS 
+    }
 
     def __init__(self, pr_start=1, pr_end=0, **kwargs):
         """
@@ -46,8 +49,11 @@ class PatientsSpider(scrapy.Spider):
             # If Patient Num is empty, we have reached the end. Break the loop.
             if not (cols and cols[0].css('::text').get()):
                 break
-            for index, field in enumerate(self.patient_fields):
-                # Third cell is empty. Skip it.
+            # 3rd col is empty, so insert a corresponding empty field name too.
+            # This is done to keep both field-name and col iterations in sync.
+            patient_fields = PATIENT_FIELDS[:2] + [''] + PATIENT_FIELDS[2:]
+            for index, field in enumerate(patient_fields):
+                # Third col is empty. Skip it.
                 if index == 2:
                     continue
                 elif index >= len(cols):

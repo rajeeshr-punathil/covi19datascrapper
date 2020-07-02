@@ -56,3 +56,6 @@ How to run (scrape data)
     scrapy crawl kerala_patients -a pr_start=4443 pr_end=4593 -o kerala_patients_latest.json
 
 
+* To export data to ``csv``, just change the filename extension from ``.json`` to ``.csv``.    
+
+
