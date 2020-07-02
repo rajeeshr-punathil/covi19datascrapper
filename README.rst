@@ -19,6 +19,11 @@ How to Install
 
 * Download or clone this repo.
 
+* Change into the source directory.
+  ::
+
+    cd covid19datascrapper/
+
 * Setup a virtual environment, if required. Example: 
   ::
 
