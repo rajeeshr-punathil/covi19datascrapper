@@ -32,3 +32,19 @@ class Patient(scrapy.Item):
     recovery_time = scrapy.Field()
     deceased = scrapy.Field()
     sources = scrapy.Field()
+
+
+class SummaryItem(scrapy.Item):
+
+    summary_date = scrapy.Field()
+    confirmed_cases = scrapy.Field()
+    recovered_cases = scrapy.Field()
+    deceased_cases = scrapy.Field()
+    transferred_cases = scrapy.Field()
+    critical_cases = scrapy.Field()
+    active_cases = scrapy.Field()
+    total_tests = scrapy.Field()
+    total_under_observation = scrapy.Field()
+    quarantined = scrapy.Field()
+    hospitalized = scrapy.Field()
+    status = scrapy.Field()
