@@ -58,7 +58,9 @@ class PatientsSpider(scrapy.Spider):
                     continue
                 elif index >= len(cols):
                     break
-                item[field] = cols[index].css('::text').get(default='')
+                value = cols[index].css('::text').get(default='')
+                # Some of the cols are given as Unspecified. Make them empty.
+                item[field] = value.strip() if value != "Unspecified" else ''
             yield item
         else:
             print("Scrapped", len(patients), "/", len(rows), "patient rows.")
